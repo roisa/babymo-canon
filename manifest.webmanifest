@@ -1,0 +1,32 @@
+{
+  "name": "Baby Mo — Kanon Doa, Hadis, & Ayat",
+  "short_name": "Baby Mo Kanon",
+  "description": "Sumber rujukan internal Baby Mo untuk doa, hadis, dan ayat Al-Qur'an.",
+  "lang": "id",
+  "start_url": "/babymo-canon/",
+  "scope": "/babymo-canon/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FDF4E3",
+  "theme_color": "#FDF4E3",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
