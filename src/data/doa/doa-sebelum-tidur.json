@@ -8,9 +8,10 @@
     "translation_id": "Dengan nama-Mu, ya Allah, aku mati dan aku hidup."
   },
   "reference": {
-    "source": "VERIFIKASI",
+    "source": "HR. Bukhari",
     "citation": "VERIFIKASI",
-    "grading": "VERIFIKASI"
+    "grading": "sahih",
+    "url": "https://sunnah.com/bukhari:6324"
   },
   "tags": ["tidur", "malam", "harian"],
   "type": "harian",
@@ -20,7 +21,7 @@
   "summary_id": "Doa yang diucapkan Nabi sebelum tidur, menyerahkan hidup dan mati kepada Allah.",
   "verification": {
     "status": "needs_review",
-    "notes": "Lazim dirujuk dari Shahih al-Bukhari; verifikasi nomor hadis sebelum dipublikasikan."
+    "notes": "Diriwayatkan Bukhari (Kitab ad-Da'awat) dan juga Muslim. Reviewer harap memverifikasi nomor hadis terhadap edisi rujukan brand."
   },
   "created_at": "2026-05-26",
   "updated_at": "2026-05-26"

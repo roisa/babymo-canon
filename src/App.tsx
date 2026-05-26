@@ -4,6 +4,7 @@ import { EmptyState } from "./components/EmptyState";
 import { EntryCard } from "./components/EntryCard";
 import { EntryModal } from "./components/EntryModal";
 import { FilterBar, type FilterState } from "./components/FilterBar";
+import { Footer } from "./components/Footer";
 import { Header, type View } from "./components/Header";
 import { SearchBar } from "./components/SearchBar";
 import {
@@ -158,6 +159,8 @@ export default function App() {
         entry={selectedEntry}
         onClose={() => setSelectedId(null)}
       />
+
+      <Footer />
     </div>
   );
 }

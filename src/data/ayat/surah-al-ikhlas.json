@@ -1,0 +1,26 @@
+{
+  "id": "surah-al-ikhlas",
+  "category": "ayat",
+  "title_id": "Surah Al-Ikhlas",
+  "arabic": "قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ",
+  "translation": {
+    "transliteration": "Qul huwallaahu ahad. Allaahush-shamad. Lam yalid wa lam yuulad. Wa lam yakul lahu kufuwan ahad.",
+    "translation_id": "Katakanlah: Dialah Allah, Yang Maha Esa. Allah tempat meminta segala sesuatu. (Allah) tidak beranak dan tidak pula diperanakkan. Dan tidak ada sesuatu pun yang setara dengan Dia."
+  },
+  "reference": {
+    "source": "QS. Al-Ikhlas",
+    "citation": "112:1-4",
+    "url": "https://quran.com/112"
+  },
+  "tags": ["surah-pendek", "tauhid", "perlindungan", "harian"],
+  "type": "perlindungan",
+  "memorization_level": "easy",
+  "production_ready": false,
+  "summary_id": "Surah pendek yang menegaskan keesaan Allah. Dianjurkan dibaca pada pagi & petang serta sebelum tidur.",
+  "verification": {
+    "status": "needs_review",
+    "notes": "Terjemahan dari Kemenag RI (versi singkat). Reviewer harap memverifikasi teks Arab terhadap Mushaf Standar Indonesia / Mushaf Madinah dan menyesuaikan terjemahan dengan edisi resmi."
+  },
+  "created_at": "2026-05-26",
+  "updated_at": "2026-05-26"
+}

@@ -9,39 +9,77 @@
     @apply min-h-screen;
   }
 
+  html {
+    /* Respect the iOS safe area on iPhones with notches / Dynamic Island. */
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
-    @apply bg-cream-50 text-ink-800 font-sans antialiased;
+    @apply bg-cream-50 text-ink-800 font-sans antialiased tracking-ios;
     text-rendering: optimizeLegibility;
+    /* iOS uses subtle font features: tabular figures + ligatures. */
+    font-feature-settings: "ss01", "cv11";
   }
 
   .arabic {
-    @apply font-arabic text-3xl leading-loose text-center;
+    @apply font-arabic text-[1.75rem] leading-[2.4] text-center;
     direction: rtl;
     unicode-bidi: embed;
+  }
+
+  /* iOS-style press feedback: tiny scale + dim. Only on devices that
+     can actually hover, so touch users get the snappy default. */
+  button,
+  [role="button"],
+  a {
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
 @layer components {
   .card {
-    @apply rounded-soft bg-white/70 shadow-soft border border-sand-100 p-5;
+    @apply rounded-ios bg-white/85 shadow-ios border border-sand-100/80 p-5;
   }
 
   .pill {
-    @apply inline-flex items-center rounded-full bg-sand-100 px-3 py-1 text-xs font-medium text-clay-600;
+    @apply inline-flex items-center rounded-full bg-sand-100 px-2.5 py-0.5 text-[11px] font-medium text-clay-600;
   }
 
   .chip {
-    @apply inline-flex items-center gap-1 rounded-full border border-sand-200 bg-white px-3 py-1.5 text-xs font-medium text-clay-600 transition-colors;
+    @apply inline-flex items-center gap-1 rounded-full border border-sand-200 bg-white/80 px-3 py-1.5 text-xs font-medium text-clay-600 transition-all;
   }
   .chip:hover {
     @apply bg-cream-100;
   }
   .chip[data-active="true"] {
-    @apply border-sage-400 bg-sage-200 text-sage-600;
+    @apply border-sage-400 bg-sage-200 text-sage-600 shadow-sm;
   }
 
   .focus-ring {
     @apply outline-none ring-0 focus-visible:ring-2 focus-visible:ring-sage-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50;
+  }
+
+  /* iOS-style press feedback for primary actions. */
+  .press {
+    @apply transition-[transform,opacity] duration-100 ease-out active:scale-[0.97] active:opacity-90;
+  }
+
+  /* iOS large title: bold, tight letter-spacing, generous leading. */
+  .large-title {
+    @apply text-[28px] font-bold leading-tight tracking-[-0.02em] text-ink-800;
+  }
+
+  /* iOS section header: small caps style label. */
+  .section-header {
+    @apply text-[12px] font-medium uppercase tracking-[0.06em] text-clay-500;
+  }
+
+  /* iOS grouped list section. */
+  .grouped {
+    @apply overflow-hidden rounded-ios border border-sand-100/80 bg-white/75 shadow-ios;
+  }
+  .grouped > * + * {
+    @apply border-t border-sand-100/80;
   }
 }
 

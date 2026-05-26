@@ -17,28 +17,44 @@ export function EntryCard({ entry, onOpen }: EntryCardProps) {
     <button
       type="button"
       onClick={() => onOpen(entry)}
-      className="card focus-ring flex h-full flex-col gap-4 text-left transition-shadow hover:shadow-md"
+      className="card press focus-ring flex h-full flex-col gap-4 text-left transition-shadow hover:shadow-md"
       aria-label={`Buka detail ${entry.title_id}`}
     >
       <header className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-[10px] uppercase tracking-wide text-clay-500">
+          <p className="text-[10px] font-medium uppercase tracking-[0.06em] text-clay-500">
             {categoryLabel[entry.category]}
             {entry.type ? ` • ${entry.type}` : null}
           </p>
-          <h2 className="truncate text-base font-semibold text-ink-800">
-            {entry.title_id}
-          </h2>
+          <div className="flex items-center gap-1.5">
+            <h2 className="truncate text-[17px] font-semibold leading-snug text-ink-800">
+              {entry.title_id}
+            </h2>
+          </div>
         </div>
-        <VerificationBadge status={entry.verification.status} />
+        <div className="flex shrink-0 items-center gap-2">
+          <VerificationBadge status={entry.verification.status} />
+          <svg
+            viewBox="0 0 20 20"
+            aria-hidden="true"
+            className="h-4 w-4 text-clay-400"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="m7 5 5 5-5 5" />
+          </svg>
+        </div>
       </header>
 
       <p className="arabic text-ink-700">{entry.arabic}</p>
 
-      <p className="text-center text-sm italic text-clay-600">
+      <p className="text-center text-[13px] italic text-clay-600">
         {entry.translation.transliteration}
       </p>
-      <p className="text-sm leading-relaxed text-ink-700">
+      <p className="text-[15px] leading-relaxed text-ink-700">
         {entry.translation.translation_id}
       </p>
 

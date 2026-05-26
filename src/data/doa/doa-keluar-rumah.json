@@ -1,0 +1,28 @@
+{
+  "id": "doa-keluar-rumah",
+  "category": "doa",
+  "title_id": "Doa Keluar Rumah",
+  "arabic": "بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
+  "translation": {
+    "transliteration": "Bismillaahi tawakkaltu 'alallaahi wa laa haula wa laa quwwata illaa billaah.",
+    "translation_id": "Dengan nama Allah, aku bertawakal kepada Allah, dan tiada daya serta kekuatan kecuali dengan pertolongan Allah."
+  },
+  "reference": {
+    "source": "HR. Abu Dawud & at-Tirmidzi",
+    "citation": "VERIFIKASI",
+    "grading": "sahih",
+    "url": "https://sunnah.com/abudawud:5095"
+  },
+  "tags": ["keluar-rumah", "tawakal", "harian"],
+  "type": "harian",
+  "memorization_level": "medium",
+  "production_ready": false,
+  "occasion_id": "keluar-rumah",
+  "summary_id": "Doa pendek untuk dibaca setiap kali meninggalkan rumah, memohon penjagaan Allah sepanjang perjalanan.",
+  "verification": {
+    "status": "needs_review",
+    "notes": "Sumber Sunan Abu Dawud (Kitab al-Adab). Reviewer harap memastikan nomor hadis & grading sesuai rujukan brand (al-Albani menshahihkannya)."
+  },
+  "created_at": "2026-05-26",
+  "updated_at": "2026-05-26"
+}

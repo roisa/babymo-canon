@@ -1,0 +1,29 @@
+{
+  "id": "doa-bangun-tidur",
+  "category": "doa",
+  "title_id": "Doa Bangun Tidur",
+  "arabic": "اَلْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ",
+  "translation": {
+    "transliteration": "Alhamdulillaahilladzii ahyaanaa ba'da maa amaatanaa wa ilaihin-nusyuur.",
+    "translation_id": "Segala puji bagi Allah yang telah menghidupkan kami setelah mematikan kami, dan kepada-Nya kami akan dikembalikan."
+  },
+  "reference": {
+    "source": "HR. Bukhari",
+    "citation": "VERIFIKASI",
+    "grading": "sahih",
+    "url": "https://sunnah.com/bukhari:6312"
+  },
+  "tags": ["tidur", "pagi", "harian"],
+  "type": "harian",
+  "memorization_level": "easy",
+  "production_ready": false,
+  "occasion_id": "bangun-tidur",
+  "summary_id": "Doa yang dibaca Nabi ﷺ setiap kali bangun dari tidur, sebagai syukur atas kehidupan baru.",
+  "variant_notes": "Beberapa riwayat juga menyebutkan tambahan zikir setelahnya (mis. tasbih, takbir). Verifikasi nomor hadis terhadap edisi cetak Shahih al-Bukhari sebelum dipublikasikan.",
+  "verification": {
+    "status": "needs_review",
+    "notes": "Sumber Sahih al-Bukhari (Kitab ad-Da'awat). Reviewer harap memastikan nomor hadis sesuai edisi yang menjadi rujukan brand."
+  },
+  "created_at": "2026-05-26",
+  "updated_at": "2026-05-26"
+}

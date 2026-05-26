@@ -1,0 +1,26 @@
+{
+  "id": "surah-an-nas",
+  "category": "ayat",
+  "title_id": "Surah An-Nas",
+  "arabic": "قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ",
+  "translation": {
+    "transliteration": "Qul a'uudzu birabbin-naas. Malikin-naas. Ilaahin-naas. Min syarril-waswaasil-khannaas. Alladzii yuwaswisu fii shuduurin-naas. Minal-jinnati wan-naas.",
+    "translation_id": "Katakanlah: Aku berlindung kepada Tuhan (yang memelihara dan menguasai) manusia, Raja manusia, sembahan manusia, dari kejahatan (bisikan) setan yang biasa bersembunyi, yang membisikkan (kejahatan) ke dalam dada manusia, dari (golongan) jin dan manusia."
+  },
+  "reference": {
+    "source": "QS. An-Nas",
+    "citation": "114:1-6",
+    "url": "https://quran.com/114"
+  },
+  "tags": ["surah-pendek", "perlindungan", "mu'awwidzatain", "harian"],
+  "type": "perlindungan",
+  "memorization_level": "easy",
+  "production_ready": false,
+  "summary_id": "Surah penutup Al-Qur'an, memohon perlindungan dari bisikan setan. Bagian dari Mu'awwidzatain.",
+  "verification": {
+    "status": "needs_review",
+    "notes": "Terjemahan dari Kemenag RI. Reviewer harap memverifikasi teks Arab terhadap Mushaf Standar Indonesia."
+  },
+  "created_at": "2026-05-26",
+  "updated_at": "2026-05-26"
+}

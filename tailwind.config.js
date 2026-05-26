@@ -31,23 +31,36 @@ export default {
         },
       },
       fontFamily: {
+        // iOS-leaning system stack: SF Pro on Apple, Segoe UI Variable on
+        // Windows, Roboto on Android, fall back to friendly Nunito if a
+        // user has it installed.
         sans: [
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "'SF Pro Text'",
+          "'SF Pro Display'",
+          "'Segoe UI Variable Display'",
+          "'Segoe UI'",
+          "Roboto",
           "Nunito",
           "ui-sans-serif",
           "system-ui",
-          "-apple-system",
-          "Segoe UI",
           "Helvetica",
           "Arial",
           "sans-serif",
         ],
-        arabic: ["'Amiri Quran'", "'Scheherazade New'", "serif"],
+        arabic: ["'Amiri Quran'", "'Scheherazade New'", "'Noto Naskh Arabic'", "serif"],
       },
       borderRadius: {
         soft: "1rem",
+        ios: "1.25rem",
       },
       boxShadow: {
         soft: "0 4px 16px -8px rgba(140, 95, 60, 0.18)",
+        ios: "0 1px 2px rgba(60, 40, 25, 0.06), 0 8px 24px -12px rgba(60, 40, 25, 0.18)",
+      },
+      letterSpacing: {
+        ios: "-0.01em",
       },
     },
   },

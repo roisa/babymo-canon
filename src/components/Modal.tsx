@@ -5,30 +5,26 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   children: ReactNode;
-  /** Optional content rendered in the modal footer (right-aligned). */
   footer?: ReactNode;
 }
 
 /**
- * Lightweight, accessible modal.
+ * Lightweight, accessible iOS-style modal sheet.
+ *  - Mobile: sheet pinned to the bottom with a drag indicator
+ *  - Desktop: centered dialog
  *  - Escape and backdrop click close it
- *  - Body scroll is locked while open
- *  - Focus moves to the close button on open and is restored on close
- *  - Inert "no-print" hint excludes the modal from print output
+ *  - Body scroll locked while open, focus restored on close
  */
 export function Modal({ open, onClose, title, children, footer }: ModalProps) {
-  const closeRef = useRef<HTMLButtonElement | null>(null);
+  const doneRef = useRef<HTMLButtonElement | null>(null);
   const previouslyFocused = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!open) return;
-
     previouslyFocused.current = document.activeElement as HTMLElement | null;
     const { overflow } = document.body.style;
     document.body.style.overflow = "hidden";
-
-    closeRef.current?.focus();
-
+    doneRef.current?.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
@@ -36,7 +32,6 @@ export function Modal({ open, onClose, title, children, footer }: ModalProps) {
       }
     };
     window.addEventListener("keydown", onKey);
-
     return () => {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = overflow;
@@ -48,7 +43,7 @@ export function Modal({ open, onClose, title, children, footer }: ModalProps) {
 
   return (
     <div
-      className="no-print fixed inset-0 z-40 flex items-end justify-center bg-ink-800/40 backdrop-blur-sm sm:items-center"
+      className="no-print fixed inset-0 z-40 flex items-end justify-center bg-ink-800/40 backdrop-blur-md sm:items-center"
       role="presentation"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
@@ -58,39 +53,39 @@ export function Modal({ open, onClose, title, children, footer }: ModalProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
-        className="relative flex max-h-[92vh] w-full max-w-2xl flex-col rounded-t-soft bg-cream-50 shadow-soft sm:rounded-soft"
+        className="relative flex max-h-[92vh] w-full max-w-2xl flex-col rounded-t-[24px] bg-cream-50/95 shadow-ios backdrop-blur-xl sm:rounded-ios"
       >
-        <header className="flex items-start justify-between gap-4 border-b border-sand-100 px-5 py-4">
+        {/* iOS drag indicator (visible on mobile only). */}
+        <div className="flex justify-center pt-2 sm:hidden" aria-hidden="true">
+          <span className="h-1 w-9 rounded-full bg-sand-300/80" />
+        </div>
+
+        <header className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 px-4 py-3 sm:px-5">
+          <span className="hidden sm:block" />
           <h2
             id="modal-title"
-            className="min-w-0 truncate text-base font-semibold text-ink-800"
+            className="col-start-2 truncate text-center text-[15px] font-semibold text-ink-800"
           >
             {title}
           </h2>
-          <button
-            ref={closeRef}
-            type="button"
-            onClick={onClose}
-            aria-label="Tutup"
-            className="focus-ring -m-2 grid h-9 w-9 place-items-center rounded-full text-clay-500 hover:bg-cream-100 hover:text-clay-600"
-          >
-            <svg
-              viewBox="0 0 20 20"
-              aria-hidden="true"
-              className="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
+          <div className="col-start-3 flex justify-end">
+            <button
+              ref={doneRef}
+              type="button"
+              onClick={onClose}
+              className="press focus-ring rounded-full px-3 py-1 text-[15px] font-medium text-clay-600 hover:text-clay-700"
             >
-              <path strokeLinecap="round" d="M5 5l10 10M15 5L5 15" />
-            </svg>
-          </button>
+              Selesai
+            </button>
+          </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto px-5 py-5">{children}</div>
+        <div className="flex-1 overflow-y-auto px-4 pb-5 pt-1 sm:px-5">
+          {children}
+        </div>
 
         {footer ? (
-          <footer className="flex flex-wrap items-center justify-end gap-2 border-t border-sand-100 bg-white/60 px-5 py-3">
+          <footer className="flex flex-wrap items-center justify-end gap-2 border-t border-sand-100/80 bg-white/60 px-4 py-3 sm:px-5">
             {footer}
           </footer>
         ) : null}
