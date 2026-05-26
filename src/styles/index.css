@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    @apply min-h-screen;
+  }
+
+  body {
+    @apply bg-cream-50 text-ink-800 font-sans antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .arabic {
+    @apply font-arabic text-3xl leading-loose text-right;
+    direction: rtl;
+    unicode-bidi: embed;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-soft bg-white/70 shadow-soft border border-sand-100 p-5;
+  }
+
+  .pill {
+    @apply inline-flex items-center rounded-full bg-sand-100 px-3 py-1 text-xs font-medium text-clay-600;
+  }
+}
