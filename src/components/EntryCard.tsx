@@ -1,4 +1,3 @@
-import { useState } from "react";
 import type { CanonEntry, Category } from "../lib/schema";
 import { VerificationBadge } from "./VerificationBadge";
 
@@ -10,41 +9,17 @@ const categoryLabel: Record<Category, string> = {
 
 interface EntryCardProps {
   entry: CanonEntry;
+  onOpen: (entry: CanonEntry) => void;
 }
 
-async function copyText(value: string): Promise<boolean> {
-  try {
-    await navigator.clipboard.writeText(value);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-export function EntryCard({ entry }: EntryCardProps) {
-  const [copied, setCopied] = useState<null | "arabic" | "all">(null);
-
-  function handleCopy(kind: "arabic" | "all") {
-    const payload =
-      kind === "arabic"
-        ? entry.arabic
-        : [
-            entry.title_id,
-            entry.arabic,
-            entry.translation.transliteration,
-            entry.translation.translation_id,
-            `${entry.reference.source} — ${entry.reference.citation}`,
-          ].join("\n\n");
-    void copyText(payload).then((ok) => {
-      if (ok) {
-        setCopied(kind);
-        window.setTimeout(() => setCopied(null), 1500);
-      }
-    });
-  }
-
+export function EntryCard({ entry, onOpen }: EntryCardProps) {
   return (
-    <article className="card flex h-full flex-col gap-4">
+    <button
+      type="button"
+      onClick={() => onOpen(entry)}
+      className="card focus-ring flex h-full flex-col gap-4 text-left transition-shadow hover:shadow-md"
+      aria-label={`Buka detail ${entry.title_id}`}
+    >
       <header className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-[10px] uppercase tracking-wide text-clay-500">
@@ -81,23 +56,6 @@ export function EntryCard({ entry }: EntryCardProps) {
           ))}
         </div>
       ) : null}
-
-      <div className="mt-auto flex items-center justify-end gap-2 pt-2">
-        <button
-          type="button"
-          onClick={() => handleCopy("arabic")}
-          className="focus-ring rounded-full border border-sand-200 bg-white px-3 py-1.5 text-xs font-medium text-clay-600 hover:bg-cream-100"
-        >
-          {copied === "arabic" ? "Tersalin ✓" : "Salin Arab"}
-        </button>
-        <button
-          type="button"
-          onClick={() => handleCopy("all")}
-          className="focus-ring rounded-full bg-clay-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-clay-600"
-        >
-          {copied === "all" ? "Tersalin ✓" : "Salin semua"}
-        </button>
-      </div>
-    </article>
+    </button>
   );
 }

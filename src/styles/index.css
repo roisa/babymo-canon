@@ -44,3 +44,60 @@
     @apply outline-none ring-0 focus-visible:ring-2 focus-visible:ring-sage-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50;
   }
 }
+
+/* Print: produce a clean, button-free sheet of the currently filtered
+   entries. Designed to look like a printable doa booklet. */
+@media print {
+  :root {
+    color-scheme: light;
+  }
+  body {
+    background: white !important;
+    color: #2A2018 !important;
+    font-size: 11pt;
+  }
+  .no-print {
+    display: none !important;
+  }
+  /* Force single-column flow for predictable page breaks. */
+  main {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+  .grid {
+    display: block !important;
+  }
+  .card {
+    background: white !important;
+    border: 1px solid #E6CFA5 !important;
+    box-shadow: none !important;
+    margin: 0 0 0.5cm 0 !important;
+    padding: 0.75cm !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .arabic {
+    color: #000 !important;
+    font-size: 22pt;
+    line-height: 1.7;
+  }
+  .pill,
+  .chip {
+    border: 1px solid #D4B585 !important;
+    background: white !important;
+    color: #3D2F25 !important;
+  }
+  a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+  /* Footer print mark so paper copies trace back to the canon. */
+  body::after {
+    content: "Baby Mo • Kanon Doa, Hadis, & Ayat";
+    display: block;
+    text-align: center;
+    font-size: 9pt;
+    color: #8C5F3C;
+    margin-top: 0.5cm;
+  }
+}

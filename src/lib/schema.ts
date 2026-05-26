@@ -82,6 +82,25 @@ export const VerificationSchema = z
   .strict();
 export type Verification = z.infer<typeof VerificationSchema>;
 
+/** Asset reference for the design team (graphics, audio, doc templates). */
+export const UsageAssetKindSchema = z.enum([
+  "audio",
+  "graphic",
+  "video",
+  "doc",
+  "other",
+]);
+export type UsageAssetKind = z.infer<typeof UsageAssetKindSchema>;
+
+export const UsageAssetSchema = z
+  .object({
+    kind: UsageAssetKindSchema,
+    url: z.string().url("URL aset tidak valid."),
+    label: z.string().optional(),
+  })
+  .strict();
+export type UsageAsset = z.infer<typeof UsageAssetSchema>;
+
 /** Slug — lowercase, kebab-case, ASCII only. */
 const slugSchema = z
   .string()
@@ -102,6 +121,10 @@ export const CanonEntrySchema = z
     production_ready: z.boolean().default(false),
     occasion_id: z.string().optional(),
     summary_id: z.string().optional(),
+    /** Notes about textual variants / alternate riwayat. */
+    variant_notes: z.string().optional(),
+    /** Linked assets (audio recordings, graphic templates, etc.). */
+    usage_assets: z.array(UsageAssetSchema).default([]),
     verification: VerificationSchema,
     created_at: isoDate,
     updated_at: isoDate,
