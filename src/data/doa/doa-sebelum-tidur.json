@@ -13,6 +13,9 @@
     "grading": "VERIFIKASI"
   },
   "tags": ["tidur", "malam", "harian"],
+  "type": "harian",
+  "memorization_level": "easy",
+  "production_ready": false,
   "occasion_id": "sebelum-tidur",
   "summary_id": "Doa yang diucapkan Nabi sebelum tidur, menyerahkan hidup dan mati kepada Allah.",
   "verification": {

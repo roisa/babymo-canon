@@ -13,6 +13,9 @@
     "grading": "VERIFIKASI"
   },
   "tags": ["makan", "harian", "rezeki"],
+  "type": "harian",
+  "memorization_level": "easy",
+  "production_ready": false,
   "occasion_id": "sebelum-makan",
   "summary_id": "Doa singkat memohon keberkahan rezeki dan perlindungan dari api neraka.",
   "verification": {

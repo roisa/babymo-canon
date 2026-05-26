@@ -15,7 +15,7 @@
   }
 
   .arabic {
-    @apply font-arabic text-3xl leading-loose text-right;
+    @apply font-arabic text-3xl leading-loose text-center;
     direction: rtl;
     unicode-bidi: embed;
   }
@@ -28,5 +28,19 @@
 
   .pill {
     @apply inline-flex items-center rounded-full bg-sand-100 px-3 py-1 text-xs font-medium text-clay-600;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full border border-sand-200 bg-white px-3 py-1.5 text-xs font-medium text-clay-600 transition-colors;
+  }
+  .chip:hover {
+    @apply bg-cream-100;
+  }
+  .chip[data-active="true"] {
+    @apply border-sage-400 bg-sage-200 text-sage-600;
+  }
+
+  .focus-ring {
+    @apply outline-none ring-0 focus-visible:ring-2 focus-visible:ring-sage-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50;
   }
 }

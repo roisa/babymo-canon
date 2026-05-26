@@ -34,6 +34,20 @@ export const VerificationStatusSchema = z.enum([
 ]);
 export type VerificationStatus = z.infer<typeof VerificationStatusSchema>;
 
+/** Memorization difficulty hint for parents/kids. */
+export const MemorizationLevelSchema = z.enum(["easy", "medium", "hard"]);
+export type MemorizationLevel = z.infer<typeof MemorizationLevelSchema>;
+
+/**
+ * Free-form sub-classification within a category — e.g. doa: "harian" /
+ * "khusus"; hadith: "qudsi" / "nabawi"; ayat: "makkiyah" / "madaniyah".
+ * Kept as a slug so it stays filterable and URL-safe.
+ */
+const typeSchema = z
+  .string()
+  .min(1)
+  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/u, "type harus kebab-case ASCII huruf kecil.");
+
 /** Source reference — kitab, surah:ayat, or collection citation. */
 export const ReferenceSchema = z
   .object({
@@ -83,6 +97,9 @@ export const CanonEntrySchema = z
     translation: TranslationSchema,
     reference: ReferenceSchema,
     tags: z.array(z.string().min(1)).default([]),
+    type: typeSchema.optional(),
+    memorization_level: MemorizationLevelSchema.optional(),
+    production_ready: z.boolean().default(false),
     occasion_id: z.string().optional(),
     summary_id: z.string().optional(),
     verification: VerificationSchema,
@@ -95,6 +112,14 @@ export const CanonEntrySchema = z
     {
       message: "updated_at tidak boleh lebih awal dari created_at.",
       path: ["updated_at"],
+    },
+  )
+  .refine(
+    (entry) => !entry.production_ready || entry.verification.status === "verified",
+    {
+      message:
+        "production_ready hanya boleh true jika verification.status = 'verified'.",
+      path: ["production_ready"],
     },
   );
 
