@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
-import { AddEntryForm } from "./components/AddEntryForm";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { EmptyState } from "./components/EmptyState";
 import { EntryCard } from "./components/EntryCard";
 import { EntryModal } from "./components/EntryModal";
@@ -12,14 +11,17 @@ import {
   emptyFilters,
   useCanonSearch,
 } from "./hooks/useCanonSearch";
+import { useTheme } from "./hooks/useTheme";
 import { loadEntries } from "./lib/loadEntries";
 import type { CanonEntry } from "./lib/schema";
 
+// The Add view is only used by editors. Keep it out of the homepage
+// bundle so first paint stays snappy.
+const AddEntryForm = lazy(() =>
+  import("./components/AddEntryForm").then((m) => ({ default: m.AddEntryForm })),
+);
+
 function parseHash(hash: string): { view: View; entryId: string | null } {
-  // Supported shapes:
-  //   #/add               -> Add entry view
-  //   #/entry/<id>        -> Library view with modal open
-  //   anything else       -> Library view
   const normalized = hash.replace(/^#\/?/, "");
   if (normalized === "add") return { view: "add", entryId: null };
   const m = normalized.match(/^entry\/([a-z0-9-]+)$/i);
@@ -40,13 +42,14 @@ export default function App() {
   const { entries, issues } = useMemo(() => loadEntries(), []);
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState<FilterState>(emptyFilters);
+  const [searchFocused, setSearchFocused] = useState(false);
+
+  const { theme, cycle: cycleTheme } = useTheme();
 
   const initial = useMemo(() => parseHash(window.location.hash), []);
   const [view, setView] = useState<View>(initial.view);
   const [selectedId, setSelectedId] = useState<string | null>(initial.entryId);
 
-  // Reflect view + selection in the URL hash so the browser back button
-  // closes the modal / leaves the add view as users expect.
   useEffect(() => {
     writeHash(view, selectedId);
   }, [view, selectedId]);
@@ -65,10 +68,11 @@ export default function App() {
     };
   }, []);
 
-  const { results, availableTypes } = useCanonSearch({
+  const { results, availableTypes, searching } = useCanonSearch({
     entries,
     query,
     filters,
+    prefetchSearch: searchFocused,
   });
 
   const verifiedCount = useMemo(
@@ -91,6 +95,10 @@ export default function App() {
 
   return (
     <div className="min-h-screen pb-16">
+      <a href="#main" className="skip-link">
+        Lewati ke konten
+      </a>
+
       <Header
         total={entries.length}
         verified={verifiedCount}
@@ -99,12 +107,21 @@ export default function App() {
           setView(v);
           if (v === "add") setSelectedId(null);
         }}
+        theme={theme}
+        onCycleTheme={cycleTheme}
       />
 
       {view === "library" ? (
-        <main className="mx-auto max-w-6xl space-y-4 px-4 py-6 sm:px-6">
+        <main
+          id="main"
+          className="mx-auto max-w-6xl space-y-4 px-4 py-6 sm:px-6"
+        >
           <div className="no-print space-y-4">
-            <SearchBar value={query} onChange={setQuery} />
+            <SearchBar
+              value={query}
+              onChange={setQuery}
+              onFocus={() => setSearchFocused(true)}
+            />
             <FilterBar
               state={filters}
               setState={setFilters}
@@ -117,31 +134,38 @@ export default function App() {
             <EmptyState variant="load-error" issueCount={issues.length} />
           ) : null}
 
-          <p className="px-1 text-xs text-clay-500">
-            Menampilkan {results.length} dari {entries.length} entri.
+          <p
+            className="px-1 text-xs text-clay-500"
+            aria-live="polite"
+          >
+            {searching
+              ? "Memuat pencarian…"
+              : `Menampilkan ${results.length} dari ${entries.length} entri.`}
           </p>
 
-          {entries.length === 0 ? (
-            <EmptyState variant="no-entries" />
-          ) : results.length === 0 ? (
-            <EmptyState
-              variant="no-results"
-              onReset={hasQueryOrFilters ? resetAll : undefined}
-            />
-          ) : (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {results.map((entry) => (
-                <EntryCard
-                  key={entry.id}
-                  entry={entry}
-                  onOpen={(e) => setSelectedId(e.id)}
-                />
-              ))}
-            </div>
-          )}
+          <section id="results" aria-label="Daftar entri">
+            {entries.length === 0 ? (
+              <EmptyState variant="no-entries" />
+            ) : results.length === 0 ? (
+              <EmptyState
+                variant="no-results"
+                onReset={hasQueryOrFilters ? resetAll : undefined}
+              />
+            ) : (
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {results.map((entry) => (
+                  <EntryCard
+                    key={entry.id}
+                    entry={entry}
+                    onOpen={(e) => setSelectedId(e.id)}
+                  />
+                ))}
+              </div>
+            )}
+          </section>
         </main>
       ) : (
-        <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
+        <main id="main" className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
           <div className="mb-4 space-y-1">
             <h2 className="text-lg font-semibold text-ink-800">
               Tambah entri kanon
@@ -151,7 +175,15 @@ export default function App() {
               JSON, lalu buka Pull Request untuk peninjauan.
             </p>
           </div>
-          <AddEntryForm />
+          <Suspense
+            fallback={
+              <div className="card text-center text-sm text-clay-500">
+                Memuat formulir…
+              </div>
+            }
+          >
+            <AddEntryForm />
+          </Suspense>
         </main>
       )}
 

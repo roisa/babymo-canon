@@ -100,7 +100,7 @@ export function FilterBar({
   }
 
   return (
-    <section className="rounded-soft border border-sand-200 bg-white/70 shadow-soft">
+    <section className="rounded-soft border border-sand-200 bg-cream-100/70 shadow-soft">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}

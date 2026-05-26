@@ -109,6 +109,11 @@ const slugSchema = z
 
 export const CanonEntrySchema = z
   .object({
+    /**
+     * Forward-compatible schema version. Increment when a breaking field
+     * change ships; older entries can be migrated by tooling.
+     */
+    schema_version: z.literal(1).default(1),
     id: slugSchema,
     category: CategorySchema,
     title_id: z.string().min(1, "Judul Bahasa Indonesia wajib diisi."),

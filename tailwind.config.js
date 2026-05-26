@@ -1,39 +1,45 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
+  // Dark mode driven by either the OS preference or an explicit data-theme.
+  // Classes like dark:foo activate when `<html class="dark">` is set; we use
+  // CSS variables underneath, so most existing utilities also auto-flip.
+  darkMode: ["class", '[data-theme="dark"]'],
   theme: {
     extend: {
       colors: {
-        // Soft, warm, kid-friendly palette. No neon, no harsh contrasts.
+        // All palette names are backed by CSS variables defined in
+        // src/styles/index.css. Variables carry semantic intent, so the
+        // same class (e.g. bg-cream-50) is the "page background" in
+        // both light and dark themes.
         cream: {
-          50: "#FFFBF3",
-          100: "#FDF4E3",
-          200: "#F8E7C6",
+          50: "rgb(var(--color-cream-50) / <alpha-value>)",
+          100: "rgb(var(--color-cream-100) / <alpha-value>)",
+          200: "rgb(var(--color-cream-200) / <alpha-value>)",
         },
         sand: {
-          100: "#F2E4CB",
-          200: "#E6CFA5",
-          300: "#D4B585",
+          100: "rgb(var(--color-sand-100) / <alpha-value>)",
+          200: "rgb(var(--color-sand-200) / <alpha-value>)",
+          300: "rgb(var(--color-sand-300) / <alpha-value>)",
         },
         clay: {
-          400: "#C99A6B",
-          500: "#B07C4F",
-          600: "#8C5F3C",
+          400: "rgb(var(--color-clay-400) / <alpha-value>)",
+          500: "rgb(var(--color-clay-500) / <alpha-value>)",
+          600: "rgb(var(--color-clay-600) / <alpha-value>)",
+          700: "rgb(var(--color-clay-700) / <alpha-value>)",
         },
         sage: {
-          200: "#D7E4D1",
-          400: "#9CB69A",
-          600: "#5F7E62",
+          200: "rgb(var(--color-sage-200) / <alpha-value>)",
+          400: "rgb(var(--color-sage-400) / <alpha-value>)",
+          600: "rgb(var(--color-sage-600) / <alpha-value>)",
         },
         ink: {
-          700: "#3D2F25",
-          800: "#2A2018",
+          700: "rgb(var(--color-ink-700) / <alpha-value>)",
+          800: "rgb(var(--color-ink-800) / <alpha-value>)",
+          900: "rgb(var(--color-ink-900) / <alpha-value>)",
         },
       },
       fontFamily: {
-        // iOS-leaning system stack: SF Pro on Apple, Segoe UI Variable on
-        // Windows, Roboto on Android, fall back to friendly Nunito if a
-        // user has it installed.
         sans: [
           "-apple-system",
           "BlinkMacSystemFont",

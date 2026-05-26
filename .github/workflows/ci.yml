@@ -17,5 +17,5 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm run lint
-      - run: npm run validate:canon
+      - run: npm run check:all
       - run: npm run build

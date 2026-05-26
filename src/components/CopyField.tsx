@@ -34,7 +34,7 @@ export function CopyField({
           type="button"
           onClick={() => void copy(value)}
           aria-live="polite"
-          className="focus-ring rounded-full border border-sand-200 bg-white px-2.5 py-1 text-[11px] font-medium text-clay-600 hover:bg-cream-100"
+          className="focus-ring rounded-full border border-sand-200 bg-cream-100 px-2.5 py-1 text-[11px] font-medium text-clay-600 hover:bg-cream-100"
         >
           {copied ? "Tersalin!" : "Salin"}
         </button>

@@ -1,0 +1,20 @@
+# CODEOWNERS — required reviewers per area.
+#
+# Replace the @org/team placeholders with real GitHub usernames or teams
+# before enabling Branch protection → "Require review from Code Owners".
+
+# Schema and validation changes touch every entry; canon leads must sign.
+/src/lib/schema.ts                 @roisa
+/scripts/validateCanon.ts          @roisa
+/scripts/checkArabic.ts            @roisa
+/scripts/checkDuplicates.ts        @roisa
+
+# Per-category religious authorities.
+/src/data/doa/                     @roisa
+/src/data/hadith/                  @roisa
+/src/data/ayat/                    @roisa
+
+# Build, CI/CD, and infra.
+/.github/                          @roisa
+/vite.config.ts                    @roisa
+/package.json                      @roisa

@@ -29,6 +29,11 @@ interface EntryModalProps {
   onClose: () => void;
 }
 
+function entryDeepLink(id: string): string {
+  const base = `${window.location.origin}${window.location.pathname}`;
+  return `${base}#/entry/${id}`;
+}
+
 function MetaRow({ label, value }: { label: string; value: string | null | undefined }) {
   if (!value) return null;
   return (
@@ -41,6 +46,7 @@ function MetaRow({ label, value }: { label: string; value: string | null | undef
 
 export function EntryModal({ entry, onClose }: EntryModalProps) {
   const { copy: copyAll, copied: copiedAll } = useCopy();
+  const { copy: copyLink, copied: copiedLink } = useCopy();
 
   if (!entry) return null;
 
@@ -73,8 +79,15 @@ export function EntryModal({ entry, onClose }: EntryModalProps) {
           </span>
           <button
             type="button"
+            onClick={() => void copyLink(entryDeepLink(entry.id))}
+            className="press focus-ring rounded-full border border-sand-200 bg-cream-100/70 px-3 py-1.5 text-xs font-medium text-clay-600 hover:bg-cream-200/60"
+          >
+            {copiedLink ? "Tautan tersalin!" : "Salin tautan"}
+          </button>
+          <button
+            type="button"
             onClick={() => void copyAll(allText)}
-            className="focus-ring rounded-full bg-clay-500 px-4 py-1.5 text-xs font-medium text-white hover:bg-clay-600"
+            className="press focus-ring rounded-full bg-clay-500 px-4 py-1.5 text-xs font-medium text-cream-50 hover:bg-clay-600"
           >
             {copiedAll ? "Tersalin!" : "Salin semua"}
           </button>
@@ -89,7 +102,7 @@ export function EntryModal({ entry, onClose }: EntryModalProps) {
               Siap produksi
             </span>
           ) : (
-            <span className="inline-flex items-center rounded-full border border-sand-200 bg-white px-2.5 py-0.5 text-[11px] font-medium text-clay-500">
+            <span className="inline-flex items-center rounded-full border border-sand-200 bg-cream-100 px-2.5 py-0.5 text-[11px] font-medium text-clay-500">
               Belum siap produksi
             </span>
           )}
@@ -145,7 +158,7 @@ export function EntryModal({ entry, onClose }: EntryModalProps) {
           </section>
         ) : null}
 
-        <section className="space-y-1.5 rounded-soft border border-sand-100 bg-white/70 p-4">
+        <section className="space-y-1.5 rounded-soft border border-sand-100 bg-cream-100/70 p-4">
           <p className="text-[11px] font-medium uppercase tracking-wide text-clay-500">
             Verifikasi
           </p>
@@ -175,7 +188,7 @@ export function EntryModal({ entry, onClose }: EntryModalProps) {
               {entry.usage_assets.map((asset, idx) => (
                 <li
                   key={`${asset.url}-${idx}`}
-                  className="flex items-center justify-between gap-3 rounded-soft border border-sand-100 bg-white/70 px-3 py-2 text-sm"
+                  className="flex items-center justify-between gap-3 rounded-soft border border-sand-100 bg-cream-100/70 px-3 py-2 text-sm"
                 >
                   <span className="pill bg-cream-100 text-clay-600">
                     {assetKindLabel[asset.kind]}
@@ -194,7 +207,7 @@ export function EntryModal({ entry, onClose }: EntryModalProps) {
           </section>
         ) : null}
 
-        <section className="space-y-1.5 rounded-soft border border-sand-100 bg-white/70 p-4">
+        <section className="space-y-1.5 rounded-soft border border-sand-100 bg-cream-100/70 p-4">
           <p className="text-[11px] font-medium uppercase tracking-wide text-clay-500">
             Metadata
           </p>

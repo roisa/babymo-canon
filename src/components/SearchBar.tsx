@@ -1,9 +1,10 @@
 interface SearchBarProps {
   value: string;
   onChange: (value: string) => void;
+  onFocus?: () => void;
 }
 
-export function SearchBar({ value, onChange }: SearchBarProps) {
+export function SearchBar({ value, onChange, onFocus }: SearchBarProps) {
   return (
     <label className="relative block">
       <span className="sr-only">Cari kanon</span>
@@ -26,7 +27,9 @@ export function SearchBar({ value, onChange }: SearchBarProps) {
         placeholder="Cari judul, terjemahan, atau tag…"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="focus-ring w-full rounded-soft border border-sand-200 bg-white py-3 pl-10 pr-10 text-sm text-ink-800 placeholder:text-clay-400 shadow-soft"
+        onFocus={onFocus}
+        aria-controls="results"
+        className="focus-ring w-full rounded-soft border border-sand-200 bg-cream-100/80 py-3 pl-10 pr-10 text-sm text-ink-800 placeholder:text-clay-400 shadow-soft"
       />
       {value ? (
         <button

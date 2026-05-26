@@ -85,7 +85,7 @@ export function Modal({ open, onClose, title, children, footer }: ModalProps) {
         </div>
 
         {footer ? (
-          <footer className="flex flex-wrap items-center justify-end gap-2 border-t border-sand-100/80 bg-white/60 px-4 py-3 sm:px-5">
+          <footer className="flex flex-wrap items-center justify-end gap-2 border-t border-sand-100/80 bg-cream-100/60 px-4 py-3 sm:px-5">
             {footer}
           </footer>
         ) : null}

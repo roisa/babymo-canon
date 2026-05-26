@@ -1,22 +1,61 @@
-import Fuse from "fuse.js";
-import { useDeferredValue, useMemo } from "react";
-import type { CanonEntry } from "../lib/schema";
+import type Fuse from "fuse.js";
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import type { FilterState } from "../components/FilterBar";
+import { normalizeSearchText } from "../lib/normalize";
+import type { CanonEntry } from "../lib/schema";
 
-const fuseOptions: ConstructorParameters<typeof Fuse<CanonEntry>>[1] = {
-  // Conservative threshold: tolerant of typos without producing noise.
+/**
+ * Search/filter orchestration.
+ *
+ * - Fuse.js is dynamically imported so the homepage paints before the
+ *   library arrives. We prefetch it on first focus of the search input
+ *   so by the time the user types a character, Fuse is ready.
+ * - Strings are normalized (diacritic-folded, transliteration-folded)
+ *   on both sides of the index so "do'a" finds "doa", etc.
+ * - Filters are applied AFTER text search so relevance ranking is
+ *   preserved; filters only remove rows, they don't reorder.
+ */
+
+interface IndexedEntry {
+  entry: CanonEntry;
+  haystack: {
+    title_id: string;
+    translation_id: string;
+    transliteration: string;
+    tags: string;
+    reference: string;
+    arabic: string;
+  };
+}
+
+function buildIndex(entries: CanonEntry[]): IndexedEntry[] {
+  return entries.map((entry) => ({
+    entry,
+    haystack: {
+      title_id: normalizeSearchText(entry.title_id),
+      translation_id: normalizeSearchText(entry.translation.translation_id),
+      transliteration: normalizeSearchText(entry.translation.transliteration),
+      tags: normalizeSearchText(entry.tags.join(" ")),
+      reference: normalizeSearchText(
+        `${entry.reference.source} ${entry.reference.citation}`,
+      ),
+      arabic: entry.arabic,
+    },
+  }));
+}
+
+const fuseOptions = {
   threshold: 0.35,
   ignoreLocation: true,
   minMatchCharLength: 2,
   includeScore: false,
   keys: [
-    { name: "title_id", weight: 3 },
-    { name: "translation.translation_id", weight: 2 },
-    { name: "translation.transliteration", weight: 2 },
-    { name: "tags", weight: 1.5 },
-    { name: "reference.source", weight: 1 },
-    { name: "reference.citation", weight: 1 },
-    { name: "arabic", weight: 1 },
+    { name: "haystack.title_id", weight: 3 },
+    { name: "haystack.translation_id", weight: 2 },
+    { name: "haystack.transliteration", weight: 2 },
+    { name: "haystack.tags", weight: 1.5 },
+    { name: "haystack.reference", weight: 1 },
+    { name: "haystack.arabic", weight: 1 },
   ],
 };
 
@@ -49,37 +88,61 @@ export interface SearchInput {
   entries: CanonEntry[];
   query: string;
   filters: FilterState;
+  /** Set to true once the user has focused the search input. */
+  prefetchSearch?: boolean;
 }
 
 export interface SearchResult {
   results: CanonEntry[];
-  /** All distinct `type` values present in the dataset, sorted. */
   availableTypes: string[];
+  /** True while Fuse is still loading after a query has been typed. */
+  searching: boolean;
 }
 
 export function useCanonSearch({
   entries,
   query,
   filters,
+  prefetchSearch = false,
 }: SearchInput): SearchResult {
-  // useDeferredValue lets fast typists keep the input snappy even if
-  // result rendering is expensive; Fuse itself is cheap at our scale.
   const deferredQuery = useDeferredValue(query);
 
-  const fuse = useMemo(
-    () => new Fuse(entries, fuseOptions),
-    [entries],
-  );
+  const indexed = useMemo(() => buildIndex(entries), [entries]);
 
-  const searched = useMemo(() => {
-    const q = deferredQuery.trim();
-    if (!q) return entries;
-    return fuse.search(q).map((r) => r.item);
+  const [fuse, setFuse] = useState<Fuse<IndexedEntry> | null>(null);
+  const loadStarted = useRef(false);
+
+  // Kick off the Fuse import either when the user has focused the search
+  // box, or as soon as they type. Either way it happens lazily — first
+  // paint never blocks on it.
+  useEffect(() => {
+    const want = prefetchSearch || deferredQuery.trim().length > 0;
+    if (!want || loadStarted.current) return;
+    loadStarted.current = true;
+    void import("fuse.js").then(({ default: FuseCtor }) => {
+      setFuse(new FuseCtor(indexed, fuseOptions));
+    });
+  }, [prefetchSearch, deferredQuery, indexed]);
+
+  // Rebuild Fuse when entries change.
+  useEffect(() => {
+    if (!fuse) return;
+    fuse.setCollection(indexed);
+  }, [indexed, fuse]);
+
+  const searched = useMemo<{ list: CanonEntry[]; searching: boolean }>(() => {
+    const q = normalizeSearchText(deferredQuery);
+    if (!q) return { list: entries, searching: false };
+    if (!fuse) return { list: entries, searching: true };
+    return {
+      list: fuse.search(q).map((r) => r.item.entry),
+      searching: false,
+    };
   }, [entries, fuse, deferredQuery]);
 
   const results = useMemo(
-    () => searched.filter((entry) => applyFilters(entry, filters)),
-    [searched, filters],
+    () => searched.list.filter((entry) => applyFilters(entry, filters)),
+    [searched.list, filters],
   );
 
   const availableTypes = useMemo(() => {
@@ -88,7 +151,7 @@ export function useCanonSearch({
     return [...set].sort();
   }, [entries]);
 
-  return { results, availableTypes };
+  return { results, availableTypes, searching: searched.searching };
 }
 
 export function countActiveFilters(filters: FilterState): number {

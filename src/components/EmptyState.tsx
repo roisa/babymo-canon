@@ -69,7 +69,7 @@ export function EmptyState({ variant, issueCount, onReset }: EmptyStateProps) {
         <button
           type="button"
           onClick={onReset}
-          className="focus-ring mt-1 rounded-full bg-clay-500 px-4 py-1.5 text-xs font-medium text-white hover:bg-clay-600"
+          className="focus-ring mt-1 rounded-full bg-clay-500 px-4 py-1.5 text-xs font-medium text-cream-50 hover:bg-clay-600"
         >
           {text.cta}
         </button>

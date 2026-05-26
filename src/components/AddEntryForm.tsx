@@ -71,6 +71,7 @@ function buildEntry(draft: Draft, today: string): Record<string, unknown> {
   }
 
   const entry: Record<string, unknown> = {
+    schema_version: 1,
     id: toSlug(draft.title_id),
     category: draft.category,
     title_id: draft.title_id.trim(),
@@ -129,7 +130,7 @@ function Field({ label, hint, error, children }: FieldProps) {
 
 function input(className?: string) {
   return [
-    "focus-ring w-full rounded-soft border border-sand-200 bg-white px-3 py-2 text-sm text-ink-800 placeholder:text-clay-400",
+    "focus-ring w-full rounded-soft border border-sand-200 bg-cream-100 px-3 py-2 text-sm text-ink-800 placeholder:text-clay-400",
     className ?? "",
   ]
     .filter(Boolean)
@@ -362,7 +363,7 @@ export function AddEntryForm() {
 
         <p className="rounded-soft border border-sand-200 bg-cream-100 p-3 text-xs text-clay-600">
           Status verifikasi akan otomatis di-set ke{" "}
-          <code className="rounded bg-white/70 px-1">needs_review</code>.
+          <code className="rounded bg-cream-100/70 px-1">needs_review</code>.
           Entri ini tidak akan langsung tersimpan — salin JSON di sebelah lalu
           buka Pull Request.
         </p>
@@ -385,7 +386,7 @@ export function AddEntryForm() {
           </span>
         </div>
 
-        <pre className="max-h-[60vh] overflow-auto rounded-soft border border-sand-200 bg-white p-4 text-xs leading-relaxed text-ink-800">
+        <pre className="max-h-[60vh] overflow-auto rounded-soft border border-sand-200 bg-cream-100 p-4 text-xs leading-relaxed text-ink-800">
           <code>{json}</code>
         </pre>
 
@@ -398,14 +399,14 @@ export function AddEntryForm() {
             type="button"
             disabled={!isValid}
             onClick={() => void copy(json)}
-            className="focus-ring shrink-0 rounded-full bg-clay-500 px-4 py-1.5 text-xs font-medium text-white hover:bg-clay-600 disabled:cursor-not-allowed disabled:bg-sand-300"
+            className="focus-ring shrink-0 rounded-full bg-clay-500 px-4 py-1.5 text-xs font-medium text-cream-50 hover:bg-clay-600 disabled:cursor-not-allowed disabled:bg-sand-300"
           >
             {copied ? "Tersalin!" : "Salin JSON"}
           </button>
         </div>
 
         {!isValid && Object.keys(errors).length > 0 ? (
-          <details className="rounded-soft border border-sand-200 bg-white p-3 text-xs text-ink-700">
+          <details className="rounded-soft border border-sand-200 bg-cream-100 p-3 text-xs text-ink-700">
             <summary className="cursor-pointer font-medium text-clay-600">
               Lihat daftar kesalahan
             </summary>
@@ -443,7 +444,7 @@ function FilePathHint({
   return (
     <p className="text-xs text-clay-500">
       Simpan sebagai{" "}
-      <code className="rounded bg-white/70 px-1">
+      <code className="rounded bg-cream-100/70 px-1">
         src/data/{category}/{slug}.json
       </code>
     </p>
