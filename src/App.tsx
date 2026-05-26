@@ -11,6 +11,7 @@ import {
   emptyFilters,
   useCanonSearch,
 } from "./hooks/useCanonSearch";
+import { useI18n } from "./hooks/useLocale";
 import { useTheme } from "./hooks/useTheme";
 import { loadEntries } from "./lib/loadEntries";
 import type { CanonEntry } from "./lib/schema";
@@ -45,6 +46,7 @@ export default function App() {
   const [searchFocused, setSearchFocused] = useState(false);
 
   const { theme, cycle: cycleTheme } = useTheme();
+  const { t } = useI18n();
 
   const initial = useMemo(() => parseHash(window.location.hash), []);
   const [view, setView] = useState<View>(initial.view);
@@ -96,7 +98,7 @@ export default function App() {
   return (
     <div className="min-h-screen pb-16">
       <a href="#main" className="skip-link">
-        Lewati ke konten
+        {t("header.skip")}
       </a>
 
       <Header
@@ -139,8 +141,11 @@ export default function App() {
             aria-live="polite"
           >
             {searching
-              ? "Memuat pencarian…"
-              : `Menampilkan ${results.length} dari ${entries.length} entri.`}
+              ? t("search.loading")
+              : t("results.count", {
+                  shown: results.length,
+                  total: entries.length,
+                })}
           </p>
 
           <section id="results" aria-label="Daftar entri">
@@ -168,17 +173,14 @@ export default function App() {
         <main id="main" className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
           <div className="mb-4 space-y-1">
             <h2 className="text-lg font-semibold text-ink-800">
-              Tambah entri kanon
+              {t("add.title")}
             </h2>
-            <p className="text-sm text-clay-600">
-              Aplikasi ini tidak menulis berkas. Isi formulir di bawah, salin
-              JSON, lalu buka Pull Request untuk peninjauan.
-            </p>
+            <p className="text-sm text-clay-600">{t("add.intro")}</p>
           </div>
           <Suspense
             fallback={
               <div className="card text-center text-sm text-clay-500">
-                Memuat formulir…
+                {t("add.loading")}
               </div>
             }
           >

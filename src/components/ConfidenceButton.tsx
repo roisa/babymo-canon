@@ -1,41 +1,29 @@
+import { useI18n } from "../hooks/useLocale";
 import { useConfidence } from "../hooks/useConfidence";
 
 interface ConfidenceButtonProps {
   entryId: string;
-  /** Compact = card variant (no label, just icon + count). */
   compact?: boolean;
 }
 
-/**
- * Community-confidence affordance ("Diakui").
- *
- * Visual style is intentionally Instagram-/X-verified-like (blue-circle
- * checkmark) so people recognize it as a 'verified' affordance, BUT it
- * is editorially separate from the canonical verification status:
- *  - Sage green "Terverifikasi" badge = authorized reviewer signed off.
- *  - Blue "Diakui N" check  = N people on the internet said "I trust this".
- *
- * The two are intentionally never the same color, so designers can read
- * the difference at a glance.
- */
 export function ConfidenceButton({ entryId, compact }: ConfidenceButtonProps) {
+  const { t } = useI18n();
   const { count, hasVoted, loading, vote } = useConfidence(entryId);
 
-  const label = hasVoted ? "Anda mengakui" : "Saya kenal doa ini";
+  const label = hasVoted ? t("confidence.voted") : t("confidence.cta");
   const display = count == null ? "—" : count;
 
   return (
     <button
       type="button"
       onClick={(e) => {
-        // Don't bubble — buttons inside the card mustn't open the modal.
         e.stopPropagation();
         void vote();
       }}
       disabled={hasVoted || loading}
       aria-pressed={hasVoted}
-      aria-label={`${label}. ${count ?? 0} pengguna telah mengakui.`}
-      title={hasVoted ? "Terima kasih, Anda sudah mengakui" : label}
+      aria-label={t("confidence.aria", { label, count: count ?? 0 })}
+      title={label}
       className={
         "press focus-ring inline-flex shrink-0 items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-semibold transition-colors " +
         (hasVoted
@@ -45,15 +33,14 @@ export function ConfidenceButton({ entryId, compact }: ConfidenceButtonProps) {
     >
       <VerifiedCheck active={hasVoted} />
       <span className="tabular-nums">{display}</span>
-      {!compact ? <span className="hidden sm:inline">Diakui</span> : null}
+      {!compact ? (
+        <span className="hidden sm:inline">{t("confidence.label")}</span>
+      ) : null}
     </button>
   );
 }
 
 function VerifiedCheck({ active }: { active: boolean }) {
-  // Instagram-style: solid circle with notched 'starburst' edge + checkmark.
-  // We draw a softer rounded-12-pointed star instead of a sharp burst so it
-  // feels at home on a warm cream surface.
   return (
     <svg
       viewBox="0 0 20 20"

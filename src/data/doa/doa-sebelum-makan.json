@@ -2,10 +2,12 @@
   "id": "doa-sebelum-makan",
   "category": "doa",
   "title_id": "Doa Sebelum Makan",
+  "title_en": "Prayer Before Eating",
   "arabic": "اللَّهُمَّ بَارِكْ لَنَا فِيمَا رَزَقْتَنَا وَقِنَا عَذَابَ النَّارِ",
   "translation": {
     "transliteration": "Allahumma baarik lanaa fiimaa razaqtanaa wa qinaa 'adzaaban-naar.",
-    "translation_id": "Ya Allah, berkahilah kami atas rezeki yang telah Engkau berikan kepada kami, dan lindungilah kami dari azab api neraka."
+    "translation_id": "Ya Allah, berkahilah kami atas rezeki yang telah Engkau berikan kepada kami, dan lindungilah kami dari azab api neraka.",
+    "translation_en": "O Allah, bless for us what You have provided us, and protect us from the punishment of the Fire."
   },
   "reference": {
     "source": "VERIFIKASI",

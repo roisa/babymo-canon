@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import type { z } from "zod";
 import { useCopy } from "../hooks/useCopy";
+import { useI18n } from "../hooks/useLocale";
 import {
   CanonEntrySchema,
   type Category,
@@ -16,14 +17,19 @@ import { toSlug } from "../lib/slug";
  * and produces a ready-to-paste JSON block. The reviewer commits the
  * file via a Pull Request — that is where the religious-safety review
  * actually happens.
+ *
+ * English title and translation are optional fields — leave blank and
+ * the canon UI will fall back to Indonesian.
  */
 
 type Draft = {
   category: Category;
   title_id: string;
+  title_en: string;
   arabic: string;
   transliteration: string;
   translation_id: string;
+  translation_en: string;
   reference_source: string;
   reference_citation: string;
   reference_grading: string;
@@ -41,9 +47,11 @@ const todayIso = () => new Date().toISOString().slice(0, 10);
 const empty: Draft = {
   category: "doa",
   title_id: "",
+  title_en: "",
   arabic: "",
   transliteration: "",
   translation_id: "",
+  translation_en: "",
   reference_source: "VERIFIKASI",
   reference_citation: "VERIFIKASI",
   reference_grading: "",
@@ -70,19 +78,25 @@ function buildEntry(draft: Draft, today: string): Record<string, unknown> {
     reference.grading = draft.reference_grading.trim();
   }
 
+  const translation: Record<string, string> = {
+    transliteration: draft.transliteration.trim(),
+    translation_id: draft.translation_id.trim(),
+  };
+  if (draft.translation_en.trim()) {
+    translation.translation_en = draft.translation_en.trim();
+  }
+
   const entry: Record<string, unknown> = {
     schema_version: 1,
     id: toSlug(draft.title_id),
     category: draft.category,
     title_id: draft.title_id.trim(),
-    arabic: draft.arabic.trim(),
-    translation: {
-      transliteration: draft.transliteration.trim(),
-      translation_id: draft.translation_id.trim(),
-    },
-    reference,
-    tags,
   };
+  if (draft.title_en.trim()) entry.title_en = draft.title_en.trim();
+  entry.arabic = draft.arabic.trim();
+  entry.translation = translation;
+  entry.reference = reference;
+  entry.tags = tags;
 
   if (draft.type.trim()) entry.type = draft.type.trim();
   if (draft.memorization_level)
@@ -138,6 +152,7 @@ function input(className?: string) {
 }
 
 export function AddEntryForm() {
+  const { t } = useI18n();
   const [draft, setDraft] = useState<Draft>(empty);
   const today = useMemo(todayIso, []);
   const slug = useMemo(() => toSlug(draft.title_id), [draft.title_id]);
@@ -145,7 +160,6 @@ export function AddEntryForm() {
   const built = useMemo(() => buildEntry(draft, today), [draft, today]);
   const parsed = useMemo(() => CanonEntrySchema.safeParse(built), [built]);
 
-  // Map Zod issues to a flat error-by-path object for inline rendering.
   const errors = useMemo(() => {
     const out: Record<string, string> = {};
     if (!parsed.success) {
@@ -175,21 +189,25 @@ export function AddEntryForm() {
           if (isValid) void copy(json);
         }}
       >
-        <Field label="Kategori">
+        <Field label={t("add.field.category")}>
           <select
             value={draft.category}
             onChange={(e) => set("category", e.target.value as Category)}
             className={input()}
           >
-            <option value="doa">Doa</option>
-            <option value="hadith">Hadis</option>
-            <option value="ayat">Ayat</option>
+            <option value="doa">{t("category.doa")}</option>
+            <option value="hadith">{t("category.hadith")}</option>
+            <option value="ayat">{t("category.ayat")}</option>
           </select>
         </Field>
 
         <Field
-          label="Judul (Bahasa Indonesia)"
-          hint={slug ? `Slug otomatis: ${slug}` : "Slug akan dibuat dari judul"}
+          label={t("add.field.title_id")}
+          hint={
+            slug
+              ? t("add.slug.hint", { slug })
+              : t("add.slug.empty")
+          }
           error={errors["title_id"] ?? errors["id"]}
         >
           <input
@@ -201,8 +219,20 @@ export function AddEntryForm() {
         </Field>
 
         <Field
-          label="Teks Arab"
-          hint='Jika belum yakin, isi literal "VERIFIKASI".'
+          label={t("add.field.title_en")}
+          error={errors["title_en"]}
+        >
+          <input
+            value={draft.title_en}
+            onChange={(e) => set("title_en", e.target.value)}
+            placeholder="e.g. Prayer Before Ablution"
+            className={input()}
+          />
+        </Field>
+
+        <Field
+          label={t("add.field.arabic")}
+          hint={t("add.field.arabic.hint")}
           error={errors["arabic"]}
         >
           <textarea
@@ -215,7 +245,7 @@ export function AddEntryForm() {
         </Field>
 
         <Field
-          label="Transliterasi"
+          label={t("add.field.transliteration")}
           error={errors["translation.transliteration"]}
         >
           <input
@@ -226,7 +256,7 @@ export function AddEntryForm() {
         </Field>
 
         <Field
-          label="Terjemahan (Bahasa Indonesia)"
+          label={t("add.field.translation_id")}
           error={errors["translation.translation_id"]}
         >
           <textarea
@@ -237,10 +267,22 @@ export function AddEntryForm() {
           />
         </Field>
 
+        <Field
+          label={t("add.field.translation_en")}
+          error={errors["translation.translation_en"]}
+        >
+          <textarea
+            value={draft.translation_en}
+            onChange={(e) => set("translation_en", e.target.value)}
+            rows={2}
+            className={input()}
+          />
+        </Field>
+
         <div className="grid gap-4 sm:grid-cols-2">
           <Field
-            label="Rujukan — sumber"
-            hint='Mis. "HR. Bukhari", "QS. Al-Fatihah".'
+            label={t("add.field.ref.source")}
+            hint={t("add.field.ref.source.hint")}
             error={errors["reference.source"]}
           >
             <input
@@ -250,8 +292,8 @@ export function AddEntryForm() {
             />
           </Field>
           <Field
-            label="Rujukan — sitasi"
-            hint='Mis. "1:1", "5746".'
+            label={t("add.field.ref.citation")}
+            hint={t("add.field.ref.citation.hint")}
             error={errors["reference.citation"]}
           >
             <input
@@ -263,8 +305,8 @@ export function AddEntryForm() {
         </div>
 
         <Field
-          label="Grading (opsional)"
-          hint="Sahih, hasan, da'if — kosongkan jika tidak relevan."
+          label={t("add.field.ref.grading")}
+          hint={t("add.field.ref.grading.hint")}
           error={errors["reference.grading"]}
         >
           <input
@@ -275,7 +317,7 @@ export function AddEntryForm() {
         </Field>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Tipe (opsional)" error={errors["type"]}>
+          <Field label={t("add.field.type")} error={errors["type"]}>
             <input
               value={draft.type}
               onChange={(e) => set("type", e.target.value)}
@@ -284,7 +326,7 @@ export function AddEntryForm() {
             />
           </Field>
           <Field
-            label="Tingkat hafalan (opsional)"
+            label={t("add.field.memo")}
             error={errors["memorization_level"]}
           >
             <select
@@ -298,16 +340,16 @@ export function AddEntryForm() {
               className={input()}
             >
               <option value="">—</option>
-              <option value="easy">Mudah</option>
-              <option value="medium">Sedang</option>
-              <option value="hard">Sulit</option>
+              <option value="easy">{t("memorization.easy")}</option>
+              <option value="medium">{t("memorization.medium")}</option>
+              <option value="hard">{t("memorization.hard")}</option>
             </select>
           </Field>
         </div>
 
         <Field
-          label="Tag (pisahkan dengan koma)"
-          hint="Mis. tidur, malam, harian"
+          label={t("add.field.tags")}
+          hint={t("add.field.tags.hint")}
           error={errors["tags"]}
         >
           <input
@@ -319,7 +361,7 @@ export function AddEntryForm() {
 
         <div className="grid gap-4 sm:grid-cols-2">
           <Field
-            label="Occasion ID (opsional)"
+            label={t("add.field.occasion")}
             error={errors["occasion_id"]}
           >
             <input
@@ -328,7 +370,7 @@ export function AddEntryForm() {
               className={input()}
             />
           </Field>
-          <Field label="Ringkasan singkat (opsional)" error={errors["summary_id"]}>
+          <Field label={t("add.field.summary")} error={errors["summary_id"]}>
             <input
               value={draft.summary_id}
               onChange={(e) => set("summary_id", e.target.value)}
@@ -338,7 +380,7 @@ export function AddEntryForm() {
         </div>
 
         <Field
-          label="Catatan varian (opsional)"
+          label={t("add.field.variant")}
           error={errors["variant_notes"]}
         >
           <textarea
@@ -350,7 +392,7 @@ export function AddEntryForm() {
         </Field>
 
         <Field
-          label="Catatan untuk reviewer (opsional)"
+          label={t("add.field.reviewer")}
           error={errors["verification.notes"]}
         >
           <textarea
@@ -362,17 +404,16 @@ export function AddEntryForm() {
         </Field>
 
         <p className="rounded-soft border border-sand-200 bg-cream-100 p-3 text-xs text-clay-600">
-          Status verifikasi akan otomatis di-set ke{" "}
-          <code className="rounded bg-cream-100/70 px-1">needs_review</code>.
-          Entri ini tidak akan langsung tersimpan — salin JSON di sebelah lalu
-          buka Pull Request.
+          {t("add.statusNote.lead")}{" "}
+          <code className="rounded bg-cream-100/70 px-1">needs_review</code>.{" "}
+          {t("add.statusNote.tail")}
         </p>
       </form>
 
       <aside className="space-y-3 lg:sticky lg:top-20 lg:self-start">
         <div className="flex items-center justify-between gap-2">
           <p className="text-[11px] font-medium uppercase tracking-wide text-clay-500">
-            JSON yang akan disimpan
+            {t("add.preview.heading")}
           </p>
           <span
             className={
@@ -382,7 +423,9 @@ export function AddEntryForm() {
                 : "bg-amber-100 text-amber-700")
             }
           >
-            {isValid ? "Valid" : `${Object.keys(errors).length} kesalahan`}
+            {isValid
+              ? t("add.preview.valid")
+              : t("add.preview.errors", { count: Object.keys(errors).length })}
           </span>
         </div>
 
@@ -391,24 +434,21 @@ export function AddEntryForm() {
         </pre>
 
         <div className="flex items-center justify-between gap-2">
-          <p className="text-xs text-clay-500">
-            Tempel JSON ini ke folder data melalui Pull Request untuk
-            direview.
-          </p>
+          <p className="text-xs text-clay-500">{t("add.preview.helper")}</p>
           <button
             type="button"
             disabled={!isValid}
             onClick={() => void copy(json)}
             className="focus-ring shrink-0 rounded-full bg-clay-500 px-4 py-1.5 text-xs font-medium text-cream-50 hover:bg-clay-600 disabled:cursor-not-allowed disabled:bg-sand-300"
           >
-            {copied ? "Tersalin!" : "Salin JSON"}
+            {copied ? t("add.preview.ctaDone") : t("add.preview.cta")}
           </button>
         </div>
 
         {!isValid && Object.keys(errors).length > 0 ? (
           <details className="rounded-soft border border-sand-200 bg-cream-100 p-3 text-xs text-ink-700">
             <summary className="cursor-pointer font-medium text-clay-600">
-              Lihat daftar kesalahan
+              {t("add.errors.toggle")}
             </summary>
             <ul className="mt-2 space-y-1">
               {Object.entries(errors).map(([path, message]) => (
@@ -440,10 +480,11 @@ function FilePathHint({
   slug: string;
   parsed: z.SafeParseReturnType<unknown, unknown>;
 }) {
+  const { t } = useI18n();
   if (!parsed.success || !slug) return null;
   return (
     <p className="text-xs text-clay-500">
-      Simpan sebagai{" "}
+      {t("add.filePathHint")}{" "}
       <code className="rounded bg-cream-100/70 px-1">
         src/data/{category}/{slug}.json
       </code>

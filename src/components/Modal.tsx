@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from "react";
+import { useI18n } from "../hooks/useLocale";
 
 interface ModalProps {
   open: boolean;
@@ -16,6 +17,7 @@ interface ModalProps {
  *  - Body scroll locked while open, focus restored on close
  */
 export function Modal({ open, onClose, title, children, footer }: ModalProps) {
+  const { t } = useI18n();
   const doneRef = useRef<HTMLButtonElement | null>(null);
   const previouslyFocused = useRef<HTMLElement | null>(null);
 
@@ -75,7 +77,7 @@ export function Modal({ open, onClose, title, children, footer }: ModalProps) {
               onClick={onClose}
               className="press focus-ring rounded-full px-3 py-1 text-[15px] font-medium text-clay-600 hover:text-clay-700"
             >
-              Selesai
+              {t("entry.modal.close")}
             </button>
           </div>
         </header>

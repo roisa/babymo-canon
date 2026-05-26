@@ -1,3 +1,5 @@
+import { useI18n } from "../hooks/useLocale";
+
 interface SearchBarProps {
   value: string;
   onChange: (value: string) => void;
@@ -5,9 +7,10 @@ interface SearchBarProps {
 }
 
 export function SearchBar({ value, onChange, onFocus }: SearchBarProps) {
+  const { t } = useI18n();
   return (
     <label className="relative block">
-      <span className="sr-only">Cari kanon</span>
+      <span className="sr-only">{t("search.aria")}</span>
       <svg
         aria-hidden="true"
         viewBox="0 0 20 20"
@@ -24,7 +27,7 @@ export function SearchBar({ value, onChange, onFocus }: SearchBarProps) {
         inputMode="search"
         autoComplete="off"
         spellCheck={false}
-        placeholder="Cari judul, terjemahan, atau tag…"
+        placeholder={t("search.placeholder")}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onFocus={onFocus}
@@ -35,7 +38,7 @@ export function SearchBar({ value, onChange, onFocus }: SearchBarProps) {
         <button
           type="button"
           onClick={() => onChange("")}
-          aria-label="Bersihkan pencarian"
+          aria-label={t("search.clear")}
           className="focus-ring absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-clay-400 hover:bg-cream-100 hover:text-clay-600"
         >
           <svg

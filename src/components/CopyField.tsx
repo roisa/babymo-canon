@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useI18n } from "../hooks/useLocale";
 import { useCopy } from "../hooks/useCopy";
 
 interface CopyFieldProps {
@@ -23,6 +24,7 @@ export function CopyField({
   monospace = false,
 }: CopyFieldProps) {
   const { copy, copied } = useCopy();
+  const { t } = useI18n();
 
   return (
     <section className="space-y-1.5">
@@ -36,7 +38,7 @@ export function CopyField({
           aria-live="polite"
           className="focus-ring rounded-full border border-sand-200 bg-cream-100 px-2.5 py-1 text-[11px] font-medium text-clay-600 hover:bg-cream-100"
         >
-          {copied ? "Tersalin!" : "Salin"}
+          {copied ? t("entry.copy.done") : t("entry.copy.short")}
         </button>
       </div>
       <div

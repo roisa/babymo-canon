@@ -2,10 +2,12 @@
   "id": "surah-al-ikhlas",
   "category": "ayat",
   "title_id": "Surah Al-Ikhlas",
+  "title_en": "Surah Al-Ikhlas (The Sincerity)",
   "arabic": "قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ",
   "translation": {
     "transliteration": "Qul huwallaahu ahad. Allaahush-shamad. Lam yalid wa lam yuulad. Wa lam yakul lahu kufuwan ahad.",
-    "translation_id": "Katakanlah: Dialah Allah, Yang Maha Esa. Allah tempat meminta segala sesuatu. (Allah) tidak beranak dan tidak pula diperanakkan. Dan tidak ada sesuatu pun yang setara dengan Dia."
+    "translation_id": "Katakanlah: Dialah Allah, Yang Maha Esa. Allah tempat meminta segala sesuatu. (Allah) tidak beranak dan tidak pula diperanakkan. Dan tidak ada sesuatu pun yang setara dengan Dia.",
+    "translation_en": "Say: He is Allah, the One. Allah, the Eternal Refuge. He neither begets nor is born, nor is there to Him any equivalent."
   },
   "reference": {
     "source": "QS. Al-Ikhlas",

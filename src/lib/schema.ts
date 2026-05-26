@@ -68,6 +68,8 @@ export const TranslationSchema = z
   .object({
     transliteration: z.string().min(1),
     translation_id: z.string().min(1, "Terjemahan Bahasa Indonesia wajib diisi."),
+    /** Optional English translation; UI falls back to translation_id. */
+    translation_en: z.string().min(1).optional(),
   })
   .strict();
 export type Translation = z.infer<typeof TranslationSchema>;
@@ -117,6 +119,8 @@ export const CanonEntrySchema = z
     id: slugSchema,
     category: CategorySchema,
     title_id: z.string().min(1, "Judul Bahasa Indonesia wajib diisi."),
+    /** Optional English title; UI falls back to title_id. */
+    title_en: z.string().min(1).optional(),
     arabic: z.string().min(1, "Teks Arab wajib diisi (gunakan 'VERIFIKASI' jika belum jelas)."),
     translation: TranslationSchema,
     reference: ReferenceSchema,

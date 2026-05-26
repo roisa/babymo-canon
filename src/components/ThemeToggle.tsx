@@ -1,9 +1,11 @@
+import { useI18n } from "../hooks/useLocale";
+import type { TKey } from "../lib/i18n";
 import type { Theme } from "../hooks/useTheme";
 
-const label: Record<Theme, string> = {
-  system: "Otomatis",
-  light: "Terang",
-  dark: "Gelap",
+const nameKey: Record<Theme, TKey> = {
+  system: "theme.system",
+  light: "theme.light",
+  dark: "theme.dark",
 };
 
 const icon: Record<Theme, JSX.Element> = {
@@ -31,12 +33,14 @@ interface ThemeToggleProps {
 }
 
 export function ThemeToggle({ theme, onCycle }: ThemeToggleProps) {
+  const { t } = useI18n();
+  const aria = t("theme.aria", { name: t(nameKey[theme]) });
   return (
     <button
       type="button"
       onClick={onCycle}
-      aria-label={`Tema: ${label[theme]} (klik untuk ganti)`}
-      title={`Tema: ${label[theme]}`}
+      aria-label={aria}
+      title={t(nameKey[theme])}
       className="press focus-ring grid h-9 w-9 place-items-center rounded-full border border-sand-200 bg-cream-100/70 text-clay-600 hover:bg-cream-200/60"
     >
       <span className="h-4 w-4">{icon[theme]}</span>

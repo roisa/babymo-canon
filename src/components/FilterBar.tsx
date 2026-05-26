@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useI18n } from "../hooks/useLocale";
 import type {
   Category,
   MemorizationLevel,
@@ -19,25 +20,6 @@ interface FilterBarProps {
   availableTypes: string[];
   activeCount: number;
 }
-
-const categoryOptions: { value: Category; label: string }[] = [
-  { value: "doa", label: "Doa" },
-  { value: "hadith", label: "Hadis" },
-  { value: "ayat", label: "Ayat" },
-];
-
-const statusOptions: { value: VerificationStatus; label: string }[] = [
-  { value: "verified", label: "Terverifikasi" },
-  { value: "in_review", label: "Sedang ditinjau" },
-  { value: "needs_review", label: "Perlu ditinjau" },
-  { value: "rejected", label: "Ditolak" },
-];
-
-const memorizationOptions: { value: MemorizationLevel; label: string }[] = [
-  { value: "easy", label: "Mudah" },
-  { value: "medium", label: "Sedang" },
-  { value: "hard", label: "Sulit" },
-];
 
 function toggle<T>(set: Set<T>, value: T): Set<T> {
   const next = new Set(set);
@@ -87,7 +69,27 @@ export function FilterBar({
   availableTypes,
   activeCount,
 }: FilterBarProps) {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
+
+  const categoryOptions: { value: Category; label: string }[] = [
+    { value: "doa", label: t("category.doa") },
+    { value: "hadith", label: t("category.hadith") },
+    { value: "ayat", label: t("category.ayat") },
+  ];
+
+  const statusOptions: { value: VerificationStatus; label: string }[] = [
+    { value: "verified", label: t("status.verified") },
+    { value: "in_review", label: t("status.in_review") },
+    { value: "needs_review", label: t("status.needs_review") },
+    { value: "rejected", label: t("status.rejected") },
+  ];
+
+  const memorizationOptions: { value: MemorizationLevel; label: string }[] = [
+    { value: "easy", label: t("memorization.easy") },
+    { value: "medium", label: t("memorization.medium") },
+    { value: "hard", label: t("memorization.hard") },
+  ];
 
   function clear() {
     setState({
@@ -108,7 +110,7 @@ export function FilterBar({
         className="focus-ring flex w-full items-center justify-between rounded-soft px-4 py-3 text-left"
       >
         <span className="flex items-center gap-2 text-sm font-medium text-ink-800">
-          Filter
+          {t("filter.title")}
           {activeCount > 0 ? (
             <span className="rounded-full bg-sage-200 px-2 py-0.5 text-[11px] font-semibold text-sage-600">
               {activeCount}
@@ -130,7 +132,7 @@ export function FilterBar({
       {open ? (
         <div className="space-y-4 border-t border-sand-100 px-4 py-4">
           <ChipRow
-            label="Kategori"
+            label={t("filter.category")}
             options={categoryOptions}
             selected={state.categories}
             onToggle={(v) =>
@@ -140,8 +142,8 @@ export function FilterBar({
 
           {availableTypes.length > 0 ? (
             <ChipRow
-              label="Tipe"
-              options={availableTypes.map((t) => ({ value: t, label: t }))}
+              label={t("filter.type")}
+              options={availableTypes.map((tp) => ({ value: tp, label: tp }))}
               selected={state.types}
               onToggle={(v) =>
                 setState({ ...state, types: toggle(state.types, v) })
@@ -150,7 +152,7 @@ export function FilterBar({
           ) : null}
 
           <ChipRow
-            label="Status verifikasi"
+            label={t("filter.status")}
             options={statusOptions}
             selected={state.statuses}
             onToggle={(v) =>
@@ -159,7 +161,7 @@ export function FilterBar({
           />
 
           <ChipRow
-            label="Tingkat hafalan"
+            label={t("filter.memorization")}
             options={memorizationOptions}
             selected={state.memorization}
             onToggle={(v) =>
@@ -176,7 +178,7 @@ export function FilterBar({
               }
               className="focus-ring h-4 w-4 rounded border-sand-300 text-sage-600"
             />
-            Hanya tampilkan yang siap produksi
+            {t("filter.productionOnly")}
           </label>
 
           {activeCount > 0 ? (
@@ -186,7 +188,7 @@ export function FilterBar({
                 onClick={clear}
                 className="focus-ring text-xs font-medium text-clay-500 underline-offset-2 hover:text-clay-600 hover:underline"
               >
-                Bersihkan semua filter
+                {t("filter.clearAll")}
               </button>
             </div>
           ) : null}

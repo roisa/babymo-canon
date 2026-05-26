@@ -1,3 +1,6 @@
+import { useI18n } from "../hooks/useLocale";
+import type { TKey } from "../lib/i18n";
+
 export type EmptyVariant = "no-results" | "no-entries" | "load-error";
 
 interface EmptyStateProps {
@@ -6,27 +9,28 @@ interface EmptyStateProps {
   onReset?: () => void;
 }
 
-const copy: Record<
+const variantKeys: Record<
   EmptyVariant,
-  { title: string; body: string; cta?: string }
+  { title: TKey; body: TKey; cta?: TKey }
 > = {
   "no-results": {
-    title: "Tidak ada hasil yang cocok",
-    body: "Coba sederhanakan kata pencarian atau bersihkan filter aktif.",
-    cta: "Bersihkan pencarian & filter",
+    title: "empty.noResults.title",
+    body: "empty.noResults.body",
+    cta: "empty.noResults.cta",
   },
   "no-entries": {
-    title: "Belum ada entri kanon",
-    body: "Tambahkan berkas JSON di src/data/{doa,hadith,ayat} dan jalankan npm run validate:canon.",
+    title: "empty.noEntries.title",
+    body: "empty.noEntries.body",
   },
   "load-error": {
-    title: "Beberapa entri tidak dapat dimuat",
-    body: "Periksa konsol untuk daftar berkas yang gagal divalidasi. Aplikasi tetap berjalan dengan entri yang valid.",
+    title: "empty.loadError.title",
+    body: "empty.loadError.body",
   },
 };
 
 export function EmptyState({ variant, issueCount, onReset }: EmptyStateProps) {
-  const text = copy[variant];
+  const { t } = useI18n();
+  const keys = variantKeys[variant];
 
   return (
     <div className="card flex flex-col items-center gap-3 py-10 text-center">
@@ -60,18 +64,20 @@ export function EmptyState({ variant, issueCount, onReset }: EmptyStateProps) {
           </svg>
         )}
       </div>
-      <h3 className="text-sm font-semibold text-ink-800">{text.title}</h3>
-      <p className="max-w-sm text-sm text-clay-600">{text.body}</p>
+      <h3 className="text-sm font-semibold text-ink-800">{t(keys.title)}</h3>
+      <p className="max-w-sm text-sm text-clay-600">{t(keys.body)}</p>
       {variant === "load-error" && typeof issueCount === "number" ? (
-        <p className="text-xs text-clay-500">{issueCount} berkas dilewati.</p>
+        <p className="text-xs text-clay-500">
+          {t("empty.loadError.count", { count: issueCount })}
+        </p>
       ) : null}
-      {text.cta && onReset ? (
+      {keys.cta && onReset ? (
         <button
           type="button"
           onClick={onReset}
           className="focus-ring mt-1 rounded-full bg-clay-500 px-4 py-1.5 text-xs font-medium text-cream-50 hover:bg-clay-600"
         >
-          {text.cta}
+          {t(keys.cta)}
         </button>
       ) : null}
     </div>

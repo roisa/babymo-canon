@@ -1,11 +1,14 @@
+import { useI18n } from "../hooks/useLocale";
+import type { TKey } from "../lib/i18n";
+import { localizedTitle, localizedTranslation } from "../lib/i18n";
 import type { CanonEntry, Category } from "../lib/schema";
 import { ConfidenceButton } from "./ConfidenceButton";
 import { VerificationBadge } from "./VerificationBadge";
 
-const categoryLabel: Record<Category, string> = {
-  doa: "Doa",
-  hadith: "Hadis",
-  ayat: "Ayat",
+const categoryKey: Record<Category, TKey> = {
+  doa: "category.doa",
+  hadith: "category.hadith",
+  ayat: "category.ayat",
 };
 
 interface EntryCardProps {
@@ -14,22 +17,26 @@ interface EntryCardProps {
 }
 
 export function EntryCard({ entry, onOpen }: EntryCardProps) {
+  const { t, locale } = useI18n();
+  const title = localizedTitle(entry, locale);
+  const translation = localizedTranslation(entry.translation, locale);
+
   return (
     <button
       type="button"
       onClick={() => onOpen(entry)}
       className="card press focus-ring flex h-full flex-col gap-4 text-left transition-shadow hover:shadow-md"
-      aria-label={`Buka detail ${entry.title_id}`}
+      aria-label={t("entry.open.aria", { title: title.value })}
     >
       <header className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-[10px] font-medium uppercase tracking-[0.06em] text-clay-500">
-            {categoryLabel[entry.category]}
+            {t(categoryKey[entry.category])}
             {entry.type ? ` • ${entry.type}` : null}
           </p>
           <div className="flex items-center gap-1.5">
             <h2 className="truncate text-[17px] font-semibold leading-snug text-ink-800">
-              {entry.title_id}
+              {title.value}
             </h2>
           </div>
         </div>
@@ -59,7 +66,12 @@ export function EntryCard({ entry, onOpen }: EntryCardProps) {
         {entry.translation.transliteration}
       </p>
       <p className="text-[15px] leading-relaxed text-ink-700">
-        {entry.translation.translation_id}
+        {translation.value}
+        {translation.fallback ? (
+          <span className="ml-1 text-[11px] text-clay-400">
+            {t("locale.fallback.translation")}
+          </span>
+        ) : null}
       </p>
 
       <p className="text-xs text-clay-500">

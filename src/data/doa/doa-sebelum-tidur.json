@@ -2,10 +2,12 @@
   "id": "doa-sebelum-tidur",
   "category": "doa",
   "title_id": "Doa Sebelum Tidur",
+  "title_en": "Prayer Before Sleeping",
   "arabic": "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا",
   "translation": {
     "transliteration": "Bismika Allahumma amuutu wa ahyaa.",
-    "translation_id": "Dengan nama-Mu, ya Allah, aku mati dan aku hidup."
+    "translation_id": "Dengan nama-Mu, ya Allah, aku mati dan aku hidup.",
+    "translation_en": "In Your name, O Allah, I die and I live."
   },
   "reference": {
     "source": "HR. Bukhari",

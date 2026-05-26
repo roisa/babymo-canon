@@ -2,10 +2,12 @@
   "id": "doa-bangun-tidur",
   "category": "doa",
   "title_id": "Doa Bangun Tidur",
+  "title_en": "Prayer Upon Waking",
   "arabic": "اَلْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ",
   "translation": {
     "transliteration": "Alhamdulillaahilladzii ahyaanaa ba'da maa amaatanaa wa ilaihin-nusyuur.",
-    "translation_id": "Segala puji bagi Allah yang telah menghidupkan kami setelah mematikan kami, dan kepada-Nya kami akan dikembalikan."
+    "translation_id": "Segala puji bagi Allah yang telah menghidupkan kami setelah mematikan kami, dan kepada-Nya kami akan dikembalikan.",
+    "translation_en": "All praise is for Allah, who has given us life after causing us to die, and to Him is the resurrection."
   },
   "reference": {
     "source": "HR. Bukhari",
