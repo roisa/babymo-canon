@@ -1,5 +1,6 @@
 import type { CanonEntry, Category, UsageAssetKind } from "../lib/schema";
 import { useCopy } from "../hooks/useCopy";
+import { ConfidenceButton } from "./ConfidenceButton";
 import { CopyField } from "./CopyField";
 import { Modal } from "./Modal";
 import { VerificationBadge } from "./VerificationBadge";
@@ -97,6 +98,7 @@ export function EntryModal({ entry, onClose }: EntryModalProps) {
       <div className="space-y-6">
         <div className="flex flex-wrap items-center gap-2">
           <VerificationBadge status={entry.verification.status} />
+          <ConfidenceButton entryId={entry.id} />
           {entry.production_ready ? (
             <span className="inline-flex items-center rounded-full border border-sage-400 bg-sage-200 px-2.5 py-0.5 text-[11px] font-medium text-sage-600">
               Siap produksi

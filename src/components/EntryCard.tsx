@@ -1,4 +1,5 @@
 import type { CanonEntry, Category } from "../lib/schema";
+import { ConfidenceButton } from "./ConfidenceButton";
 import { VerificationBadge } from "./VerificationBadge";
 
 const categoryLabel: Record<Category, string> = {
@@ -32,20 +33,23 @@ export function EntryCard({ entry, onOpen }: EntryCardProps) {
             </h2>
           </div>
         </div>
-        <div className="flex shrink-0 items-center gap-2">
-          <VerificationBadge status={entry.verification.status} />
-          <svg
-            viewBox="0 0 20 20"
-            aria-hidden="true"
-            className="h-4 w-4 text-clay-400"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="m7 5 5 5-5 5" />
-          </svg>
+        <div className="flex shrink-0 flex-col items-end gap-1.5">
+          <div className="flex items-center gap-1.5">
+            <VerificationBadge status={entry.verification.status} />
+            <svg
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+              className="h-4 w-4 text-clay-400"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="m7 5 5 5-5 5" />
+            </svg>
+          </div>
+          <ConfidenceButton entryId={entry.id} compact />
         </div>
       </header>
 
